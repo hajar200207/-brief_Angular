@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Suivi du Diabète</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<h1>Suivi de la Glycémie</h1>
+
+<div>
+    <label for="filter">Filtrer par :</label>
+    <select id="filter">
+        <option value="week">Semaine</option>
+        <option value="month">Mois</option>
+    </select>
+</div>
+
+<canvas id="glycemieChart"></canvas>
+
+<script>
+    const ctx = document.getElementById('glycemieChart').getContext('2d');
+    const config = {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Niveau de glycémie',
+                data: [],
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                yAxisID: 'y',
+            }]
+        },
+        options: {
+            responsive: true,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            stacked: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Suivi de la Glycémie'
+                }
+            },
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                }
+            }
+        }
+    };
+    const glycemieChart = new Chart(ctx, config);
+
+
+    function updateChartData(filterType) {
+        fetch(`/getGlycemieData?filter=${filterType}`)
+            .then(response => response.json())
+            .then(data => {
+                glycemieChart.data.labels = data.labels;
+                glycemieChart.data.datasets[0].data = data.values;
+                glycemieChart.update();
+            });
+    }
+
+    document.getElementById('filter').addEventListener('change', function() {
+        updateChartData(this.value);
+    });
+
+    updateChartData('week');
+</script>
+</body>
+</html>

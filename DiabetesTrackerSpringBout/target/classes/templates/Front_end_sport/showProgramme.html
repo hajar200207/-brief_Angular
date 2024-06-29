@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Programme and Movements</h1>
+<ul>
+
+    <p>Programme ID: <span th:text="${programme.id}"></span></p>
+    <p>Programme Name: <span th:text="${programme.name}"></span></p>
+    <p>Start Date: <span th:text="${programme.startDate}"></span></p>
+    <p>Heurs: <span th:text="${programme.heurs}"></span></p>
+    <p>End Date: <span th:text="${programme.endDate}"></span></p>
+    <p>Description: <span th:text="${programme.description}"></span></p>
+
+    <li th:each="pm : ${programmeAndMovementsList}">
+        <div>
+            <h2>Movement Details</h2>
+            <p>Movement ID: <span th:text="${pm.movementId}"></span></p>
+            <p>Movement Name: <span th:text="${pm.movementName}"></span></p>
+            <p>Image: <img th:src="@{${pm.image}}" alt="Image"/></p>
+            <p>Description: <span th:text="${pm.movementDescription}"></span></p>
+        </div>
+    </li>
+</ul>
+
+</body>
+</html>

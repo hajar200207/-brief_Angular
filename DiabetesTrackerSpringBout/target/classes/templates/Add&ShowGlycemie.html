@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Add and Show</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .form-container {
+            margin-top: 50px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .btn-custom {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-custom:hover {
+            background-color: #45a049;
+        }
+
+
+
+
+
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .header {
+            background: radial-gradient(ellipse at top, #343a40 0, #343a40 60%);
+            color: white;
+            padding: 10px 0;
+            border-bottom-right-radius: 100rem 5rem;
+            border-bottom-left-radius: 100rem 5rem;
+        }
+
+        .container1 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 90%;
+            margin: 0 auto;
+            margin-top: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 50px;
+            margin-right: 0px;
+            padding-bottom: 8px;
+        }
+
+        .logo span {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #17a2b8;
+        }
+
+        .ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav ul li {
+            margin: 0 15px;
+        }
+
+        .nav {
+            margin-right: 251px;
+        }
+
+
+
+        .a:hover {}
+
+        .a {
+
+            color: #fff;
+            font-size: 16px;
+            font-family: sans-serif;
+            padding: 10px 19px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            border-radius: 15px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .a:hover {
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            background-color: #17a2b8;
+        }
+
+        .buttons {
+            display: flex;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            margin-left: 10px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .page-title {
+            text-align: center;
+            color: white;
+            padding: 20px 0;
+            font-size: 3rem;
+            letter-spacing: -.04em;
+            line-height: 1.2;
+            margin-bottom: .5rem;
+            position: relative;
+            z-index: 2;
+            border-bottom-right-radius: 100rem 5rem;
+            border-bottom-left-radius: 100rem 5rem;
+        }
+
+        .titre {
+            margin-top: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin: 50px auto;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #343a40;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #495057;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-btn {
+            background-color: #17a2b8;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .dropdown-btn:hover {
+            background-color: #138496;
+        }
+
+        .btn {
+            padding: 7px 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+
+<header class="header">
+    <div class="container1">
+        <div class="logo">
+            <img src="${pageContext.request.contextPath}/resources/img/image.png" alt="Logo">
+            <span>Diabete Tracker</span>
+        </div>
+        <nav class="nav">
+            <ul class="ul">
+                <li><a class="a" href="/DiabetesTracker_war_exploded/">Home</a></li>
+                <li><a class="a" th:href="@{/Add}">Registration</a></li>
+
+                <li><a class="a" href="/DiabetesTracker_war_exploded/Showchart">Chart</a></li>
+
+                <div class="dropdown">
+                    <a class="btn a dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        Food
+                    </a>
+                    <ul class="dropdown-menu" style="">
+                        <li><a class="dropdown-item" href="ShowNourriture?genre=meat">meat</a></li>
+                        <li><a class="dropdown-item" href="ShowNourriture?genre=fruit">fruits</a></li>
+                        <li><a class="dropdown-item" href="ShowNourriture?id=3">vegetables</a></li>
+                    </ul>
+                </div>
+
+
+                <li><a class="a" th:href="@{/addRepas}"> Repas </a></li>
+            </ul>
+
+
+        </nav>
+
+    </div>
+    <div class="titre">
+        <h1 class="page-title">Registration</h1>
+    </div>
+
+</header>
+<!-- Form Section -->
+
+
+
+
+
+
+<div class="container form-container">
+    <form method="post" action="save">
+        <div class="form-group">
+            <label for="date_of_tracking">Date de suivi</label>
+            <input type="date" class="form-control" id="date_of_tracking" name="date_of_tracking" required>
+        </div>
+        <div class="form-group">
+            <label for="time_of_tracking">Heure de suivi</label>
+            <input type="time" class="form-control" id="time_of_tracking" name="time_of_tracking" required>
+        </div>
+        <div class="form-group">
+            <label for="value_glucose">Niveau de glucose (mg/dL)</label>
+            <input type="number" class="form-control" id="value_glucose" name="value_glucose"
+                   placeholder="Niveau de glucose (mg/dL)" required>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-custom">
+                Ajouter <i class="bi bi-plus"></i>
+            </button>
+        </div>
+    </form>
+</div>
+<!-- Table Section -->
+<div class="container mt-5">
+    <h2 class="mb-4">Liste des Valeurs Glycémies</h2>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Valeur Glycémie</th>
+            <th>Date</th>
+            <th>Heure</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="glycemie : ${Diabetes}">
+            <td th:text="${glycemie.id}"></td>
+            <td class="glycemie-value" th:text="${glycemie.valeur}"></td>
+            <td class="glycemie-date" th:text="${glycemie.Date_of_Tracking}"></td>
+            <td th:text="${glycemie.time}"></td>
+            <td>
+                <form method="post" th:action="@{/delete}"
+                      onsubmit="return confirm('Are you sure you want to delete this record?');">
+                    <input type="hidden" th:value="${glycemie.id}" name="id" />
+                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Chart Section -->
+<div class="container">
+    <h2>Graphiques des Valeurs Glycémiques</h2>
+    <canvas id="glycemieChart"></canvas>
+    <br />
+    <button onclick="filterData('week')">Filtrer par Semaine</button>
+    <button onclick="filterData('month')">Filtrer par Mois</button>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let lectures = /*[[${lectures}]]*/[];
+    let labels = lectures.map(lecture => new Date(lecture.date_of_Tracking));
+    let values = lectures.map(lecture => lecture.valeur);
+
+    let ctx = document.getElementById('glycemieChart').getContext('2d');
+    let config = {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Valeurs Glycémie',
+                    data: values,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            stacked: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Graphiques des Valeurs Glycémiques'
+                }
+            },
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                }
+            }
+        }
+    };
+
+    let glycemieChart = new Chart(ctx, config);
+
+    function filterData(type) {
+        fetch(`/filter?type=${type}`)
+            .then(response => response.json())
+            .then(data => {
+                let newLabels = data.map(lecture => new Date(lecture.date_of_Tracking));
+                let newValues = data.map(lecture => lecture.valeur);
+
+                glycemieChart.data.labels = newLabels;
+                glycemieChart.data.datasets[0].data = newValues;
+                glycemieChart.update();
+            });
+    }
+    /*]]>*/
+</script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+</body>
+
+</html>

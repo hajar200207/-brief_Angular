@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Détails de l'Utilisateur</title>
+</head>
+
+<body>
+<h2>Détails de l'Utilisateur</h2>
+<p><strong>ID:</strong> <span th:text="${user.id}"></span></p>
+<p><strong>Nom d'utilisateur:</strong> <span th:text="${user.username}"></span></p>
+<p><strong>Age:</strong> <span th:text="${user.age}"></span></p>
+<p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+<p><strong>Taille (cm):</strong> <span th:text="${user.height}"></span></p>
+<p><strong>Poids (kg):</strong> <span th:text="${user.weight}"></span></p>
+<a th:href="@{/users}">Retour à la Liste des Utilisateurs</a>
+</body>
+
+</html>

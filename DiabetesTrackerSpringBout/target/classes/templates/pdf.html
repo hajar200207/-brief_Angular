@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Valeurs Glycémies</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+            integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html-docx-js/0.4.0/html-docx.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .odd-row {
+            background-color: #f2f2f2;
+        }
+
+        .even-row {
+            background-color: #ffffff;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+
+        .filter-form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .filter-form button {
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .filter-form button:hover {
+            background-color: #0056b3;
+        }
+
+        canvas {
+            display: block;
+            margin: auto;
+        }
+
+        button#pdfButton, button#wordButton {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button#pdfButton {
+            background-color: #28a745;
+        }
+
+        button#pdfButton:hover {
+            background-color: #218838;
+        }
+
+        button#wordButton {
+            background-color: #007bff;
+        }
+
+        button#wordButton:hover {
+            background-color: #0056b3;
+        }
+
+        @media print {
+            body {
+                margin: 20px;
+                padding: 0;
+            }
+
+            .container {
+                width: 100%;
+                margin: 0;
+                padding: 10px;
+                border: none;
+            }
+
+            table {
+                page-break-inside: auto;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+<div id="exportTContent">
+<div id="exportContent">
+<div class="container" id="content">
+    <div>
+        <h2>Liste des Rapports</h2>
+        <div>
+            <h2>Liste des Rapports</h2>
+            <div th:each="rapport : ${rapports}">
+                <div>
+                    <p><strong>ID:</strong> <span th:text="${rapport.id}"></span></p>
+                    <p><strong>Date de Génération:</strong> <span th:text="${rapport.dateGeneration}"></span></p>
+                    <p><strong>Contenu:</strong> <span th:text="${rapport.contenu}"></span></p>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <h2>Détails de l'Utilisateur</h2>
+        <p><strong>ID:</strong> <span th:text="${user.id}"></span></p>
+        <p><strong>Nom d'utilisateur:</strong> <span th:text="${user.username}"></span></p>
+        <p><strong>Age:</strong> <span th:text="${user.age}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+        <p><strong>Taille (cm):</strong> <span th:text="${user.height}"></span></p>
+        <p><strong>Poids (kg):</strong> <span th:text="${user.weight}"></span></p>
+        <h2>Liste des Conseils</h2>
+        <h2>Liste des Conseils</h2>
+        <div th:each="conseil : ${conseils}">
+            <div>
+                <p><strong>ID:</strong> <span th:text="${conseil.id}"></span></p>
+                <p><strong>Message:</strong> <span th:text="${conseil.message}"></span></p>
+                <p><strong>Date et Heure:</strong> <span th:text="${conseil.dateHeure}"></span></p>
+            </div>
+            <hr>
+        </div>
+        <h2>Glucose Readings</h2>
+        <form class="filter-form" th:action="@{/chartDisplay}" method="get">
+            <button type="submit" name="view" value="week">Group by Week</button>
+            <button type="submit" name="view" value="month">Group by Month</button>
+            <button type="submit" name="view" value="year">Group by Year</button>
+            <br><br>
+            <label for="year">Year:</label>
+            <input type="number" id="year" name="year">
+            <label for="month">Month:</label>
+            <input type="number" id="month" name="month">
+            <label for="week">Week:</label>
+            <input type="number" id="week" name="week">
+            <button type="submit" name="view" value="specificMonth">Filter by Month</button>
+            <button type="submit" name="view" value="specificWeek">Filter by Week</button>
+        </form>
+        <canvas id="glucoseChart"></canvas>
+    </div>
+    <h2 class="mb-4">Liste des Valeurs Glycémies</h2>
+    <h2>Glucose Readings</h2>
+    <div>
+        <!-- Boucle sur les données de glycémie -->
+        <div th:each="glycemie : ${Diabetes}">
+            <div>
+                <p><strong>ID:</strong> <span th:text="${glycemie.id}"></span></p>
+                <p><strong>Valeur Glycémie:</strong> <span th:text="${glycemie.valeur}"></span></p>
+                <p><strong>Date:</strong> <span th:text="${glycemie.date_of_Tracking}"></span></p>
+                <p><strong>Heure:</strong> <span th:text="${glycemie.time}"></span></p>
+            </div>
+            <hr>
+        </div>
+    </div>
+    <div>
+        <div>
+            <div class="container mt-5">
+                <h2 class="mb-4">Liste des Repas</h2>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>ID du Repas</th>
+                        <th>ID</th>
+                        <th>Nom du Repas</th>
+                        <th>Description du Repas</th>
+                        <th>Description</th>
+                        <th>Glycides</th>
+                        <th>Type</th>
+                        <th>Ingrédients</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="repas : ${repas}">
+                        <td th:text="${repas.repasId}"></td>
+                        <td th:text="${repas.id}"></td>
+                        <td th:text="${repas.repasName}"></td>
+                        <td th:text="${repas.repasDescription}"></td>
+                        <td th:text="${repas.description}"></td>
+                        <td th:text="${repas.glycides}"></td>
+                        <td th:text="${repas.type}"></td>
+                        <td th:text="${repas.ingredients}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+     <h2>Liste des Programmes</h2>
+    <div th:each="programme : ${programme}">
+        <div>
+            <p><strong>ID:</strong> <span th:text="${programme.id}"></span></p>
+            <p><strong>Nom du Programme:</strong> <span th:text="${programme.name}"></span></p>
+            <p><strong>Date de Début:</strong> <span th:text="${programme.startDate}"></span></p>
+            <p><strong>Heures:</strong> <span th:text="${programme.heurs}"></span></p>
+            <p><strong>Date de Fin:</strong> <span th:text="${programme.endDate}"></span></p>
+            <p><strong>Description:</strong> <span th:text="${programme.description}"></span></p>
+        </div>
+        <hr>
+    </div>
+</div>
+</div>
+</div>
+<button id="wordButton" onclick="generateWord()">Export Word</button>
+<button id="pdfButton" onclick="generatePdf()">Export PDF</button>
+<!-- Button to export as .doc -->
+<button onclick="Export2Word('exportContent');">Export as .doc</button>
+
+
+<button onclick="Export2Word('exportContent');">Export as .doc</button>
+
+
+<button onclick="Export2Word('exportContent', 'word-content.docx');">Export as .docx</button>
+
+<!-- Button to export as PDF -->
+<button onclick="Export2PDF('exportTContent');">Export as PDF</button>
+
+<!-- Button to export as PDF with a specific filename -->
+<button onclick="Export2PDF('exportTContent', 'pdf-content');">Export as PDF</button>
+
+<script th:inline="javascript">
+    var labels = /*[[${labels}]]*/ [];
+    var data = /*[[${data}]]*/ [];
+
+    var ctx = document.getElementById('glucoseChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Niveau de glycémie',
+                data: data,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+<script>
+    function generatePdf() {
+        const pdfElement = document.getElementById('content');
+        html2pdf().from(pdfElement).save('rapport_glycemie.pdf');
+    }
+
+
+        function generateWord() {
+        const content = document.getElementById('content').outerHTML;
+        const converted = htmlDocx.asBlob(content);
+        saveAs(converted, 'rapport_glycemie.docx');
+    }
+    function Export2Word(element, filename = '') {
+        // HTML content to be exported
+        var preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
+        var postHtml = "</body></html>";
+        var html = preHtml + document.getElementById(element).innerHTML + postHtml;
+
+        // Blob for saving the file
+        var blob = new Blob(['\ufeff', html], {
+            type: 'application/msword'
+        });
+
+        // Specify the URL for the file
+        var url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html);
+
+        // Specify the file name
+        filename = filename ? filename + '.doc' : 'document.doc';
+
+        // Create a download link element
+        var downloadLink = document.createElement("a");
+
+        // Append the download link to the body
+        document.body.appendChild(downloadLink);
+
+        if (navigator.msSaveOrOpenBlob) {
+            // For IE and Edge
+            navigator.msSaveOrOpenBlob(blob, filename);
+        } else {
+            // For other browsers
+            // Set the href attribute of the download link
+            downloadLink.href = url;
+
+            // Set the download attribute to specify the file name
+            downloadLink.download = filename;
+
+            // Trigger the click event of the download link
+            downloadLink.click();
+        }
+
+        // Remove the download link from the body
+        document.body.removeChild(downloadLink);
+    }
+    function Export2PDF(element, filename = '') {
+        // Get the HTML content to be exported
+        var content = document.getElementById(element);
+
+        // Configuration for html2pdf
+        var opt = {
+            margin:       1,
+            filename:     filename + '.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2 },
+            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+
+        // Perform the html2pdf conversion
+        html2pdf().from(content).set(opt).save();
+    }
+
+</script>
+
+
+</body>
+
+</html>
