@@ -1,0 +1,9 @@
+/* glycemie.component.css */
+mat-form-field {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+button[type="submit"] {
+  margin-top: 10px;
+}

@@ -1,0 +1,66 @@
+@keyframes bgChange {
+  0% {
+    background-image: url(https://avatars.mds.yandex.net/i?id=e094d24d343d044391e747a9f6252c7415378907-8343339-images-thumbs&n=13);
+  }
+  25% {
+    background-image: url(https://avatars.mds.yandex.net/i?id=e094d24d343d044391e747a9f6252c7415378907-8343339-images-thumbs&n=13);
+  }
+  25.01% {
+    background-image: url(https://www.burgesshc.org/wp-content/uploads/2017/08/AdobeStock_92709947-1.jpg);
+  }
+  50% {
+    background-image: url(https://www.burgesshc.org/wp-content/uploads/2017/08/AdobeStock_92709947-1.jpg);
+  }
+  50.01% {
+    background-image: url(https://image.bangkokbiznews.com/uploads/images/md/2023/05/ZCQE5jf6fVA6nX6WrAJu.webp);
+  }
+  75% {
+    background-image: url(https://image.bangkokbiznews.com/uploads/images/md/2023/05/ZCQE5jf6fVA6nX6WrAJu.webp);
+  }
+  75.01% {
+    background-image: url(https://www.diabeticsweekly.com/wp-content/uploads/2017/08/Untitled-design-45-2-1.jpg);
+  }
+  100% {
+    background-image: url(https://www.diabeticsweekly.com/wp-content/uploads/2017/08/Untitled-design-45-2-1.jpg);
+  }
+}
+mat-form-field {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+button[type="submit"] {
+  margin-top: 10px;
+}
+
+.page-background {
+  animation: bgChange 20s infinite;
+}
+#tm-bg {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  animation: bgChange 20s infinite;
+  background-size: cover;
+  background-position: center;
+}
+#tm-bg:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.welcome-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}

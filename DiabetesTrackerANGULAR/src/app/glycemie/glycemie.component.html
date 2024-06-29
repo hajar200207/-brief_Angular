@@ -1,0 +1,45 @@
+<!-- glycemie.component.html -->
+
+<div>
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <img src="assets/images/logo.png" alt="Logo" class="logo">
+      <span class="spacer"></span>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div id="tm-bg">
+    <div class="welcome-message">
+      <h1>Welcome to APP Diabetes Tracker</h1>
+    </div>
+  </div>
+
+  </div>
+  <h2>Liste des Lectures de Glycémie</h2>
+  <ul>
+    @for (lecture of lectures; track lecture) {
+      {{lecture.id}} - {{lecture.date_of_Tracking}} - {{lecture.valeur}}<br>
+      <button mat-button color="warn" (click)="deleteGlycemie(lecture.id)">Delete</button><br>
+      <button mat-button color="primary" (click)="selectLecture(lecture)">Edit</button><br>
+    }
+  </ul>
+</div>
+
+<div *ngIf="selectedLecture">
+  <h3>Modifier Lecture de Glycémie</h3>
+  <form [formGroup]="glycemieForm" (ngSubmit)="updateGlycemie()">
+    <mat-form-field appearance="fill">
+      <mat-label>Date de Tracking</mat-label>
+      <input matInput formControlName="date_of_Tracking" type="date" id="date_of_Tracking">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Time de Tracking</mat-label>
+      <input matInput formControlName="time" type="time" id="time">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Valeur</mat-label>
+      <input matInput formControlName="valeur" type="number" id="valeur">
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit">Update</button>
+  </form>
+</div>

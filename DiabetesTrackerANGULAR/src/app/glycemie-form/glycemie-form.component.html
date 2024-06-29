@@ -1,0 +1,19 @@
+<!-- glycemie.component.html -->
+<form [formGroup]="glycemieForm" (ngSubmit)="saveGlycemie()">
+  <mat-form-field appearance="fill">
+    <mat-label>Date of Tracking:</mat-label>
+    <input matInput formControlName="date_of_Tracking" type="date" id="date_of_Tracking">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Time of Tracking:</mat-label>
+    <input matInput formControlName="time_of_Tracking" type="time" id="time_of_Tracking">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Valeur:</mat-label>
+    <input matInput formControlName="valeur" type="number" id="valeur">
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit">Save</button>
+</form>
